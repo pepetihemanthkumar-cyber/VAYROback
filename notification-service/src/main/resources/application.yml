@@ -1,0 +1,80 @@
+server:
+  port: ${SERVER_PORT:8084}
+
+spring:
+  application:
+    name: NOTIFICATION-SERVICE
+
+  datasource:
+    url: jdbc:postgresql://${DB_HOST}:${DB_PORT:5432}/${DB_NAME:postgres}?sslmode=require
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+    driver-class-name: org.postgresql.Driver
+    hikari:
+      maximum-pool-size: 3
+      minimum-idle: 1
+      idle-timeout: 30000
+      max-lifetime: 60000
+      connection-timeout: 20000
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: false
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: false
+
+  mail:
+    host: ${MAIL_HOST:smtp.gmail.com}
+    port: ${MAIL_PORT:465}
+    username: ${MAIL_USERNAME:vayro.notifications@gmail.com}
+    password: ${MAIL_PASSWORD:}
+    properties:
+      mail:
+        smtp:
+          auth: ${MAIL_SMTP_AUTH:true}
+          ssl:
+            enable: ${MAIL_SMTP_SSL_ENABLE:true}
+          starttls:
+            enable: false
+          connectiontimeout: 5000
+          timeout: 5000
+          writetimeout: 5000
+
+eureka:
+  client:
+    service-url:
+      defaultZone: ${EUREKA_SERVER_URL:http://localhost:8761/eureka/}
+    register-with-eureka: true
+    fetch-registry: true
+  instance:
+    prefer-ip-address: false
+    hostname: localhost
+    instance-id: ${spring.application.name}:${server.port}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+  health:
+    mail:
+      enabled: false
+
+jwt:
+  secret: ${JWT_SECRET:}
+
+app:
+  cors:
+    allowed-origins: ${CORS_ALLOWED_ORIGINS:http://localhost:5173}
+  notification:
+    # Server-side authoritative admin recipient email address
+    admin-email: ${ADMIN_NOTIFICATION_EMAIL:admin@vayro.com}
+    email:
+      enabled: ${NOTIFICATION_EMAIL_ENABLED:false}
+      from-name: ${MAIL_FROM_NAME:VAYRO}
+      from-address: ${MAIL_FROM_ADDRESS:${MAIL_USERNAME:vayro.notifications@gmail.com}}
+      max-retries: ${EMAIL_MAX_RETRIES:3}
+      retry-delay-ms: ${EMAIL_RETRY_DELAY_MS:1000}

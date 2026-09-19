@@ -1,0 +1,52 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: API-GATEWAY
+
+  cloud:
+    gateway:
+      httpclient:
+        connect-timeout: 3000
+        response-timeout: 5s
+
+      routes:
+        - id: user-auth-route
+          uri: lb://USER-SERVICE
+          predicates:
+            - Path=/api/auth/**
+
+        - id: user-service-route
+          uri: lb://USER-SERVICE
+          predicates:
+            - Path=/api/users/**
+
+        - id: vehicle-service-route
+          uri: lb://VEHICLE-SERVICE
+          predicates:
+            - Path=/api/vehicles/**
+
+        - id: booking-service-route
+          uri: lb://BOOKING-SERVICE
+          predicates:
+            - Path=/api/bookings/**
+
+eureka:
+  client:
+    enabled: false
+    register-with-eureka: false
+    fetch-registry: false
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+
+jwt:
+  secret: 404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970
+
+app:
+  cors:
+    allowed-origins: http://localhost:5173

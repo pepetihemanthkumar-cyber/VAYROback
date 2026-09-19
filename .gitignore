@@ -1,0 +1,28 @@
+# Target build outputs & binaries
+**/target/
+**/*.class
+**/*.jar
+**/*.war
+
+# Environment configuration & secrets
+.env
+.env.local
+.env.production
+.env.*.local
+!.env.example
+
+# Runtime logs
+**/*.log
+logs/
+
+# IDE & OS files
+.DS_Store
+.idea/
+*.iml
+.vscode/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+scratch/
