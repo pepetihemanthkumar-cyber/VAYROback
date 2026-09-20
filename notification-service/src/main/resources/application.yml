@@ -28,7 +28,7 @@ spring:
 
   mail:
     host: ${MAIL_HOST:smtp.gmail.com}
-    port: ${MAIL_PORT:465}
+    port: ${MAIL_PORT:587}
     username: ${MAIL_USERNAME:vayro.notifications@gmail.com}
     password: ${MAIL_PASSWORD:}
     properties:
@@ -36,9 +36,9 @@ spring:
         smtp:
           auth: ${MAIL_SMTP_AUTH:true}
           ssl:
-            enable: ${MAIL_SMTP_SSL_ENABLE:true}
+            enable: ${MAIL_SMTP_SSL_ENABLE:false}
           starttls:
-            enable: false
+            enable: ${MAIL_SMTP_STARTTLS_ENABLE:true}
           connectiontimeout: 5000
           timeout: 5000
           writetimeout: 5000
