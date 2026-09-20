@@ -7,16 +7,15 @@ FROM maven:3.9.9-eclipse-temurin-21-alpine AS builder
 
 WORKDIR /build
 
-# Copy root reactor POM and install parent POM locally into repository
+# Copy root parent POM (used for dependencyManagement and properties)
 COPY pom.xml ./pom.xml
-RUN mvn -N install -DskipTests -B
 
-# Copy notification-service module POM and source code
+# Copy only notification-service module POM and source code
 COPY notification-service/pom.xml ./notification-service/pom.xml
 COPY notification-service/src ./notification-service/src
 
-# Package production-ready Spring Boot executable JAR
-RUN mvn clean package -pl notification-service -DskipTests -B
+# Build notification-service directly without invoking sibling modules
+RUN mvn -f notification-service/pom.xml clean package -DskipTests -B
 
 # ==============================================================================
 # Stage 2: Minimal Java 21 Production Runtime
